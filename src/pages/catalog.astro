@@ -1,0 +1,36 @@
+---
+import StarterLayout from '@/layouts/StarterLayout.astro';
+import ResourceCatalog from '@/components/boilerplate/ResourceCatalog.vue';
+import { DATA_CONFIG } from '@/config/index.config';
+import { useConfiguredResourceService } from '@/services/resources';
+
+const service = useConfiguredResourceService();
+const [pageResult, categoriesResult] = await Promise.all([
+  service.list({ page: 1, pageSize: DATA_CONFIG.defaultPageSize, sort: 'featured' }),
+  service.getCategories(),
+]);
+
+if (!pageResult.ok || !categoriesResult.ok) {
+  return new Response(null, { status: 503 });
+}
+
+const initialQuery = {
+  page: pageResult.data.page,
+  pageSize: pageResult.data.pageSize,
+  sort: 'featured' as const,
+};
+---
+
+<StarterLayout title="Catálogo" description="Explora recursos de la base Astro.">
+  <section class="starter-hero">
+    <p class="starter-eyebrow">/01 · catálogo</p>
+    <h1 class="starter-title">Encuentra una idea útil.</h1>
+    <p class="starter-lede">Filtra, ordena y pagina una fuente de datos reemplazable.</p>
+  </section>
+  <ResourceCatalog
+    client:load
+    initialPage={pageResult.data}
+    categories={categoriesResult.data}
+    initialQuery={initialQuery}
+  />
+</StarterLayout>

@@ -1,0 +1,9 @@
+node_modules
+.agents
+dist
+.astro
+public
+docs
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

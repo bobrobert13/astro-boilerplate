@@ -1,0 +1,22 @@
+---
+import type { ResourceSummary } from '@/services/resources/resource.types';
+import { APP_ROUTES } from '@/config/index.config';
+
+interface Props {
+  resource: ResourceSummary;
+}
+
+const { resource } = Astro.props;
+---
+
+<a class="starter-card" href={APP_ROUTES.resource(resource.slug)}>
+  <div class="starter-card__meta">
+    <span>{resource.category.label}</span>
+    {resource.featured && <span>Destacado</span>}
+  </div>
+  <h2>{resource.title}</h2>
+  <p>{resource.summary}</p>
+  <div class="starter-tags" aria-label="Etiquetas">
+    {resource.tags.map((tag) => <span class="starter-tag">{tag}</span>)}
+  </div>
+</a>

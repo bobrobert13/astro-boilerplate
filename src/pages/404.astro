@@ -1,0 +1,15 @@
+---
+import StarterLayout from '@/layouts/StarterLayout.astro';
+import { APP_ROUTES } from '@/config/index.config';
+---
+
+<StarterLayout title="Página no encontrada" noindex>
+  <main class="starter-shell starter-section">
+    <div class="starter-panel starter-panel--narrow">
+      <p class="starter-eyebrow">Error 404</p>
+      <h1>Página no encontrada</h1>
+      <p class="starter-muted">La ruta solicitada no existe en este starter.</p>
+      <a class="starter-button" href={APP_ROUTES.home}>Volver al inicio</a>
+    </div>
+  </main>
+</StarterLayout>

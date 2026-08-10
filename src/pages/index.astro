@@ -1,0 +1,40 @@
+---
+import StarterLayout from '@/layouts/StarterLayout.astro';
+import ResourceCard from '@/components/boilerplate/ResourceCard.astro';
+import { APP_CONFIG, APP_ROUTES } from '@/config/index.config';
+import { useConfiguredResourceService } from '@/services/resources';
+
+const result = await useConfiguredResourceService().list({
+  page: 1,
+  pageSize: 3,
+  sort: 'featured',
+});
+const featured = result.ok ? result.data.items : [];
+---
+
+<StarterLayout title="Construye con contexto">
+  <section class="starter-hero">
+    <p class="starter-eyebrow">Astro SSR · Vue · servicios tipados</p>
+    <h1 class="starter-title">Una base clara para el siguiente producto.</h1>
+    <p class="starter-lede">
+      {APP_CONFIG.description} Explora una demo pequeña de catálogo, contratos HTTP y estados de UI que
+      puedes reemplazar por el dominio de tu proyecto.
+    </p>
+    <div class="starter-actions">
+      <a class="starter-button" href={APP_ROUTES.catalog}>Explorar catálogo</a>
+      <a class="starter-button starter-button--secondary" href={APP_ROUTES.resource('architecture')}
+        >Ver un recurso</a
+      >
+    </div>
+  </section>
+
+  <section aria-labelledby="featured-heading">
+    <div class="starter-actions" style="justify-content: space-between; align-items: baseline;">
+      <h2 id="featured-heading">Recursos destacados</h2>
+      <a href={APP_ROUTES.catalog}>Ver todos →</a>
+    </div>
+    <div class="starter-grid">
+      {featured.map((resource) => <ResourceCard resource={resource} />)}
+    </div>
+  </section>
+</StarterLayout>

@@ -1,0 +1,33 @@
+---
+import StarterLayout from '@/layouts/StarterLayout.astro';
+import { APP_ROUTES } from '@/config/index.config';
+import { useConfiguredResourceService } from '@/services/resources';
+
+const slug = Astro.params.slug;
+if (!slug) return new Response(null, { status: 404 });
+
+const result = await useConfiguredResourceService().getBySlug(slug);
+if (!result.ok) return new Response(null, { status: result.error.status ?? 404 });
+
+const { data: resource } = result;
+---
+
+<StarterLayout title={resource.title} description={resource.summary}>
+  <article class="starter-hero">
+    <p class="starter-eyebrow">
+      <a href={APP_ROUTES.catalog}>← Catálogo</a> · {resource.category.label}
+    </p>
+    <h1 class="starter-title">{resource.title}</h1>
+    <p class="starter-lede">{resource.summary}</p>
+    <div class="starter-tags" aria-label="Etiquetas">
+      {resource.tags.map((tag) => <span class="starter-tag">{tag}</span>)}
+    </div>
+  </article>
+  <section class="starter-card" aria-labelledby="description-heading">
+    <h2 id="description-heading">Sobre este recurso</h2>
+    <p>{resource.description}</p>
+    <p class="starter-card__meta">
+      Actualizado {new Date(resource.updatedAt).toLocaleDateString('es-419')}
+    </p>
+  </section>
+</StarterLayout>

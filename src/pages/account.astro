@@ -1,0 +1,31 @@
+---
+import { UserButton } from '@clerk/astro/components';
+import StarterLayout from '@/layouts/StarterLayout.astro';
+import { APP_CONFIG, APP_ROUTES } from '@/config/index.config';
+import { isAuthEnabled } from '@/services/auth/auth-provider';
+
+export const prerender = false;
+
+if (!isAuthEnabled(import.meta.env.AUTH_PROVIDER)) {
+  return new Response(null, { status: 404 });
+}
+
+const locals = Astro.locals as unknown as { auth?: () => { userId: string | null } };
+const auth = typeof locals.auth === 'function' ? locals.auth() : { userId: null };
+if (!auth.userId) {
+  return Astro.redirect(
+    `${APP_ROUTES.signIn}?redirect_url=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+---
+
+<StarterLayout title="Cuenta" description={`Área privada de ${APP_CONFIG.name}.`}>
+  <main class="starter-shell starter-section">
+    <div class="starter-panel starter-panel--narrow">
+      <p class="starter-eyebrow">Área privada</p>
+      <h1>Tu cuenta</h1>
+      <p class="starter-muted">Sesión activa para <strong>{auth.userId}</strong>.</p>
+      <UserButton signInUrl={APP_ROUTES.signIn} />
+    </div>
+  </main>
+</StarterLayout>

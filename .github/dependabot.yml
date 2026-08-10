@@ -1,0 +1,38 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 8
+    groups:
+      astro:
+        patterns:
+          - astro
+          - '@astrojs/*'
+      vue:
+        patterns:
+          - vue
+          - '@vue/*'
+          - '@vitejs/plugin-vue'
+      auth:
+        patterns:
+          - '@clerk/*'
+      quality:
+        patterns:
+          - eslint*
+          - prettier*
+          - typescript*
+          - vitest
+          - '@vitest/*'
+          - happy-dom
+          - msw
+      styling:
+        patterns:
+          - tailwindcss
+          - '@tailwindcss/*'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

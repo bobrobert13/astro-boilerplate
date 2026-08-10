@@ -1,0 +1,46 @@
+---
+import { APP_CONFIG, APP_ROUTES } from '@/config/index.config';
+import '@styles/boilerplate.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = APP_CONFIG.description, noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang={APP_CONFIG.locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <title>{title} · {APP_CONFIG.name}</title>
+  </head>
+  <body>
+    <div class="starter-shell">
+      <header class="starter-header">
+        <div class="starter-container starter-header__inner">
+          <a class="starter-brand" href={APP_ROUTES.home}>{APP_CONFIG.name}</a>
+          <nav class="starter-nav" aria-label="Navegación principal">
+            <a href={APP_ROUTES.catalog}>Catálogo</a>
+            <a href={APP_ROUTES.account}>Cuenta</a>
+          </nav>
+        </div>
+      </header>
+      <main class="starter-main">
+        <div class="starter-container">
+          <slot />
+        </div>
+      </main>
+      <footer class="starter-footer">
+        <div class="starter-container">
+          Base Astro SSR · reemplaza el dominio de ejemplo por el tuyo.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
